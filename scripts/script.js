@@ -153,3 +153,60 @@ class Stack {
         this.items = [];
     }
 }
+
+function parseExpression(exp) {
+
+    exp = exp.split(" ");
+
+    const output = new Queue();
+    const operator_stack = new Stack();
+
+    const precedence = {
+        "^": [4, "right"],
+        "/": [3, "left"],
+        "*": [3, "left"],
+        "p": [2, "left"],
+        "m": [2, "left"]
+    };
+    var operators = ["^", "/", "*", "p", "m"]
+
+    for (let i = 0; i < exp.length; i++) {
+        if (!isNaN(exp[i]) && !isNaN(parseFloat(exp[i]))) {
+            output.enqueue(exp[i])
+        }
+        else if (operators.indexOf(exp[i]) != -1) {
+            while ((operator_stack.peek() && operator_stack.peek() != "(") &&
+                (precedence[operator_stack.peek()][0] > precedence[exp[i]][0] ||
+                    (precedence[operator_stack.peek()][0] == precedence[exp[i]][0] &&
+                        (precedence[operator_stack.peek()][1] == "left" && precedence[exp[i]][1] == "left"))
+                )) {
+                output.enqueue(operator_stack.remove())
+            }
+            //}
+            operator_stack.add(exp[i]);
+        }
+        else if (exp[i] == "(") {
+            operator_stack.add(exp[i]);
+        }
+        else if (exp[i] == ")") {
+            while (operator_stack.peek() != "(") {
+                console.assert(!operator_stack.isEmpty(), { stack: operator_stack, msg: "stack is empty" });
+                /* If the stack runs out without finding a left parenthesis, then there are mismatched parentheses. */
+                output.enqueue(operator_stack.remove());
+            }
+            console.assert(operator_stack.peek() == "(", { top: operator_stack.peek(), msg: "top is not '('" });
+            operator_stack.remove();
+        }
+
+    }
+    /* After the while loop, pop the remaining items from the operator stack into the output queue. */
+    while (operator_stack.size() != 0) {
+        /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
+        console.assert(operator_stack.peek() != "(", { top: operator_stack.peek(), msg: "top is '('" });
+        output.enqueue(operator_stack.remove());
+    }
+    return output;
+}
+
+exp = "-3 p 4 * 2 / ( 1 m 5 ) ^ 2 ^ 3";
+sya = parseExpression(exp);
