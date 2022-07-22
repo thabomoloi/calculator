@@ -11,3 +11,11 @@ html {
   font-size: inherit;
   box-sizing: inherit;
 }
+
+/* =============== SCREEN ============ */
+.screen {
+  background-color: rgb(233, 255, 215);
+  width: 200px;
+  height: 50px;
+  box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
