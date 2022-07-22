@@ -218,7 +218,7 @@ function solveRpn(exp) {
         }
         else {
             // the stack must have 2 or more operands
-            console.log(stack.items)
+            //console.log(stack.items)
             if (stack.size() < 2) throw new Error("Syntax Error!");
             const o2 = stack.remove(), o1 = stack.remove();
             var operators = ["^", "/", "*", "p", "m"]
@@ -237,8 +237,6 @@ function solveRpn(exp) {
 
 function getAnswer(exp) {
     const rpn = parseExpression(exp);
-
     return solveRpn(rpn);
 }
-exp = "-3 p 4 * 2 / ( 1 m 5 ) ^ 2 ^ 3";
-sya = parseExpression(exp);
+
