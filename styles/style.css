@@ -1,0 +1,13 @@
+html {
+  background-color: rgb(0, 29, 29);
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  font-family: inherit;
+  font-size: inherit;
+  box-sizing: inherit;
+}
