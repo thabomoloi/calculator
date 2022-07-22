@@ -50,13 +50,13 @@ function pow(a, b) {
  * Takes in two numbers and operator then returns result.
  * @param {Number} a 
  * @param {Number} b 
- * @param {Number} operator 
+ * @param {String} operator 
  */
 function operate(a, b, operator) {
     switch (operator) {
-        case "+":
+        case "p":
             return add(a, b);
-        case "-":
+        case "m":
             return subtract(a, b);
         case "/":
             return divide(a, b);
@@ -205,8 +205,40 @@ function parseExpression(exp) {
         console.assert(operator_stack.peek() != "(", { top: operator_stack.peek(), msg: "top is '('" });
         output.enqueue(operator_stack.remove());
     }
-    return output;
+    return output.items;
 }
 
+function solveRpn(exp) {
+    const stack = new Stack();
+
+    for (const token of exp) {
+        const num = Number(token);
+        if (!isNaN(num)) {
+            stack.add(num);
+        }
+        else {
+            // the stack must have 2 or more operands
+            console.log(stack.items)
+            if (stack.size() < 2) throw new Error("Syntax Error!");
+            const o2 = stack.remove(), o1 = stack.remove();
+            var operators = ["^", "/", "*", "p", "m"]
+
+            // division by 0
+            if (token == "/" && o2 == 0) throw new Error(`Math Error!`)
+
+            if (operators.indexOf(token) != -1) stack.add(operate(o1, o2, token));
+            else throw new Error(`The operator [${token}] is not supported.`);
+        }
+    }
+    // the stack should have no numbers remaining
+    if (stack.size() > 1) throw new Error(`Syntax Error!`);
+    return stack.peek();
+}
+
+function getAnswer(exp) {
+    const rpn = parseExpression(exp);
+
+    return solveRpn(rpn);
+}
 exp = "-3 p 4 * 2 / ( 1 m 5 ) ^ 2 ^ 3";
 sya = parseExpression(exp);
