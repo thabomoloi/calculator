@@ -226,11 +226,8 @@ function solveRpn(exp) {
             const o2 = stack.remove(), o1 = stack.remove();
             var operators = ["^", "/", "*", "p", "m"]
 
-            // division by 0
-            if (token == "/" && o2 == 0) throw new Error(`Math Error!`)
-
             if (operators.indexOf(token) != -1) stack.add(operate(o1, o2, token));
-            else throw new Error(`The operator [${token}] is not supported.`);
+            /*else throw new Error(`The operator [${token}] is not supported.`);*/
         }
     }
     // the stack should have no numbers remaining
@@ -252,10 +249,20 @@ function getAnswer(exp) {
 const display = document.querySelector(".display");
 const screenio = document.querySelector(".screenio");
 const buttons = document.querySelectorAll("button");
+const equals = document.querySelector("#eq");
 
 // expression to solve
 var expression = "";
 
+function screenHasAns() {
+    if (screenio.innerText.charAt(0) == '=' || screenio.innerText == "Math Error!") {
+        return true;
+    }
+    return false;
+}
+function displayIsEmpty() {
+    return display.innerText == "";
+}
 // buttons event listeners
 function addToScreen(item) {
     if (item.id == "plusminus") {
@@ -270,9 +277,12 @@ function addToScreen(item) {
 
 }
 function addToDisplay(item) {
-    const ops = ["÷", "×", "+", "-", "="];
+
+    const ops = ["÷", "×", "+", "-"];
     const op = display.innerText.charAt(display.innerText.length - 1);
-    if (op.indexOf(screenio.innerText.charAt(0).replace("-", "m")) == -1 || !screen.innerText) {
+    if (op.indexOf((screenio.innerText.charAt(0).replace("-", "m")) == -1 || !screen.innerText)) {
+        if (displayIsEmpty() && isNaN(item.id) && (screenio.innerText.length == 0 || isNaN(screenio.innerText))) return;
+        if (isNaN(screenio.innerText)) return;
         MathJax.typesetPromise().then(() => {
             // modify the DOM here
             var num = screenio.innerText.replace(/(-[0-9]*\.?[0-9]*)/g, "($1)")
@@ -287,6 +297,7 @@ function addToDisplay(item) {
 
 }
 function backspace() {
+
     if (screenio.innerText) {
         screenio.innerText = screenio.innerText.substring(0, screenio.innerText.length - 1);
     }
@@ -317,30 +328,38 @@ function addLast() {
         expression += `${screenio.innerText.replace("-", "m")}`;
 
 
+
     }
 }
 function solve() {
-    try {
-        if (screenio.innerText) {
-            addLast();
+
+    if (screenio.innerText) {
+        addLast();
+    }
+    if (!expression) return;
+    expression = expression.replaceAll("mul", "*");
+    expression = expression.replaceAll("m", "-");
+    expression = expression.replaceAll("add", "p");
+    expression = expression.replaceAll("sub", "m");
+
+    expression = expression.replaceAll("div", "/");
+    var ans = getAnswer(expression);
+
+    MathJax.typesetPromise().then(() => {
+        if (ans == -Infinity) screenio.innerHTML = `\\(-\\infty\\)`;
+        else if (ans == Infinity) screenio.innerHTML = `\\(\\infty\\)`;
+        else screenio.innerHTML = `\\(${ans}\\)`;
+        MathJax.typesetPromise();
+    }).catch((err) => console.log(err.message));
+
+    // disable
+    equals.disabled = true;
+    buttons.forEach((button) => {
+        if (!(button.id == "clear")) {
+            button.disabled = true;
         }
-        expression = expression.replaceAll("mul", "*");
-        expression = expression.replaceAll("m", "-");
-        expression = expression.replaceAll("add", "p");
-        expression = expression.replaceAll("sub", "m");
+    });
 
-        expression = expression.replaceAll("div", "/");
-        var ans = getAnswer(expression);
-        MathJax.typesetPromise().then(() => {
-            screenio.innerHTML = `\\(= ${ans}\\)`;
-            screenio.style.innerText =
-                MathJax.typesetPromise();
-        }).catch((err) => console.log(err.message));
-
-    }
-    catch (ex) {
-        console.log(ex);
-    }
 }
 buttons.forEach((item) => {
     const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -372,6 +391,10 @@ buttons.forEach((item) => {
             display.innerHTML = "";
             screenio.innerHTML = "";
             expression = "";
+            equals.disabled = false;
+            buttons.forEach((button) => {
+                button.disabled = false;
+            });
         });
     }
     else if (item.id == "backspace") {
