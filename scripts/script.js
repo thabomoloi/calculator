@@ -212,6 +212,7 @@ function parseExpression(exp) {
 }
 
 function solveRpn(exp) {
+    exp = exp.trim();
     const stack = new Stack();
 
     for (const token of exp) {
@@ -270,21 +271,56 @@ function addToScreen(item) {
     }
 }
 function addToDisplay(item) {
-    const ops = ["÷", "×", "+", "-"];
+    const ops = ["÷", "×", "+", "-", "="];
     const op = display.innerText.charAt(display.innerText.length - 1);
-    if (op.indexOf(screenio.innerText.charAt(0).replace("-", "m")) == -1) {
+    if (op.indexOf(screenio.innerText.charAt(0).replace("-", "m")) == -1 || !screen.innerText) {
         MathJax.typesetPromise().then(() => {
             // modify the DOM here
             var num = screenio.innerText.replace(/(-[0-9]*\.?[0-9]*)/g, "($1)")
             display.innerHTML = `\\(${display.innerText + num + item.innerText} \\)`;
+
             expression += `${screenio.innerText.replace("-", "m")} ${item.id} `;
+
             screenio.innerText = "";
             MathJax.typesetPromise();
         }).catch((err) => console.log(err.message));
     }
 
 }
+function backspace() {
+    if (screenio.innerText) {
+        screenio.innerText = screenio.innerText.substring(0, screenio.innerText.length - 1);
+    }
+    else {
+        MathJax.typesetPromise().then(() => {
+            if (display.innerText.charAt(display.innerText.length - 1) == ")") {
+                display.innerHTML = `\\(${display.innerText.substring(0, display.innerText.lastIndexOf("("))} \\)`
+            }
+            else {
+                display.innerHTML = `\\(${display.innerText.substring(0, display.innerText.length - 1)} \\)`
+            }
+            expression = expression.trim().substring(0, expression.trim().lastIndexOf(" "));
+            MathJax.typesetPromise();
+        }).catch((err) => console.log(err.message));
 
+
+    }
+}
+function solve() {
+    try {
+        addToDisplay({ id: "", innerText: "" });
+        expression = expression.replace("mul", "*");
+        expression = expression.replace("m", "-");
+        expression = expression.replace("add", "p");
+        expression = expression.replace("sub", "m");
+
+        expression = expression.replace("div", "/");
+        solveRpn(expression);
+    }
+    catch (ex) {
+        console.log(ex);
+    }
+}
 buttons.forEach((item) => {
     const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     const ops = ["div", "mul", "sub", "add"]
@@ -316,6 +352,12 @@ buttons.forEach((item) => {
             screenio.innerHTML = "";
             expression = "";
         });
+    }
+    else if (item.id == "backspace") {
+        item.addEventListener('click', backspace);
+    }
+    else if (item.id == "eq") {
+        item.addEventListener('click', solve);
     }
 
 });
