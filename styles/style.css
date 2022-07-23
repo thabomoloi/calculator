@@ -32,7 +32,7 @@ html {
 }
 /*=============== DISPLAY ============== */
 .space {
-  padding: 10px;
+  padding: 5px;
   width: 220px;
   height: 125px;
   display: flex;
