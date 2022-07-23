@@ -252,28 +252,34 @@ const display = document.querySelector(".display");
 const screenio = document.querySelector(".screenio");
 const buttons = document.querySelectorAll("button");
 
-// espression to solve
-var espression = "";
+// expression to solve
+var expression = "";
 
 // buttons event listeners
 function addToScreen(item) {
     if (screenio.innerText.length < 15) {
         screenio.innerText += `${item.id}`;
-        espression += `${item.id}`;
+        expression += `${item.id}`;
     }
 }
 function addToDisplay(item) {
+    const ops = ["÷", "×", "+", "-", "^"];
+    const op = display.innerText.charAt(display.innerText.length - 1);
+    if (op.indexOf(screenio.innerText.charAt(0).replace("-", "m")) == -1) {
+        MathJax.typesetPromise().then(() => {
+            // modify the DOM here
+            display.innerText = `\\(${display.innerText + screenio.innerText + item.innerText}\\)`;
+            screenio.innerText = "";
+            expression += ` ${item.id} `;
+            MathJax.typesetPromise();
+        }).catch((err) => console.log(err.message));
+    }
 
-    MathJax.typesetPromise().then(() => {
-        // modify the DOM here
-        display.innerHTML = `\\(${display.innerText + screenio.innerText + item.innerText}\\)`;
-        MathJax.typesetPromise();
-    }).catch((err) => console.log(err.message));
 }
 
 buttons.forEach((item) => {
     const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-    const ops = ["power", "div", "mul", "sub", "add"]
+    const ops = ["div", "mul", "sub", "add"]
     if (nums.indexOf(item.id) != -1) {
         item.addEventListener('click', () => {
             addToScreen(item);
