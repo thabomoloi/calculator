@@ -258,19 +258,27 @@ var expression = "";
 // buttons event listeners
 function addToScreen(item) {
     if (screenio.innerText.length < 15) {
-        screenio.innerText += `${item.id}`;
-        expression += `${item.id}`;
+        if (item.id == "plusminus") {
+            if (screenio.innerText.charAt(0) == "-") {
+                screenio.innerText = screenio.innerText.substring(1);
+            } else {
+                screenio.innerText = `-${screenio.innerText}`;
+            }
+        } else {
+            screenio.innerText += `${item.id}`;
+        }
     }
 }
 function addToDisplay(item) {
-    const ops = ["÷", "×", "+", "-", "^"];
+    const ops = ["÷", "×", "+", "-"];
     const op = display.innerText.charAt(display.innerText.length - 1);
     if (op.indexOf(screenio.innerText.charAt(0).replace("-", "m")) == -1) {
         MathJax.typesetPromise().then(() => {
             // modify the DOM here
-            display.innerText = `\\(${display.innerText + screenio.innerText + item.innerText}\\)`;
+            var num = screenio.innerText.replace(/(-[0-9]*\.?[0-9]*)/g, "($1)")
+            display.innerHTML = `\\(${display.innerText + num + item.innerText} \\)`;
+            expression += `${screenio.innerText.replace("-", "m")} ${item.id} `;
             screenio.innerText = "";
-            expression += ` ${item.id} `;
             MathJax.typesetPromise();
         }).catch((err) => console.log(err.message));
     }
@@ -291,10 +299,22 @@ buttons.forEach((item) => {
             addToDisplay(item);
         });
     }
-    else if (item.id == "power") {
+    else if (item.id == "dot") {
         item.addEventListener('click', () => {
-            var temp = { id: '^' };
-            addToScreen(temp);
+            if (screenio.innerText.indexOf(".") == -1)
+                addToScreen({ id: "." });
+        });
+    }
+    else if (item.id == "plusminus") {
+        item.addEventListener('click', () => {
+            addToScreen(item);
+        });
+    }
+    else if (item.id == "clear") {
+        item.addEventListener('click', () => {
+            display.innerHTML = "";
+            screenio.innerHTML = "";
+            expression = "";
         });
     }
 
