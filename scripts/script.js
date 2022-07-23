@@ -280,6 +280,7 @@ function addToDisplay(item) {
 buttons.forEach((item) => {
     const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
     const ops = ["div", "mul", "sub", "add"]
+
     if (nums.indexOf(item.id) != -1) {
         item.addEventListener('click', () => {
             addToScreen(item);
@@ -288,6 +289,12 @@ buttons.forEach((item) => {
     else if (ops.indexOf(item.id) != -1) {
         item.addEventListener('click', () => {
             addToDisplay(item);
+        });
+    }
+    else if (item.id == "power") {
+        item.addEventListener('click', () => {
+            var temp = { id: '^' };
+            addToScreen(temp);
         });
     }
 
