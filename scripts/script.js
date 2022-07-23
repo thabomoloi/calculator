@@ -336,6 +336,14 @@ function addLast() {
 
     }
 }
+function sciNotation(number) {
+    if (number.toString.indexOf(".") != -1) {
+        var num = number.toString();
+        return num.substring(0, 14);
+    }
+
+
+}
 function solve() {
 
     if (screenio.innerText) {
@@ -355,7 +363,12 @@ function solve() {
         MathJax.typesetPromise().then(() => {
             if (ans == -Infinity) screenio.innerHTML = `\\(=-\\infty\\)`;
             else if (ans == Infinity) screenio.innerHTML = `\\(=\\infty\\)`;
-            else screenio.innerHTML = `\\(=${ans}\\)`;
+            else {
+                if (ans.toString() > 13) {
+                    ans = exponential(ans);
+                }
+                screenio.innerHTML = `\\(=${ans}\\)`
+            };
             MathJax.typesetPromise();
         }).catch((err) => console.log(err.message));
         // disable
