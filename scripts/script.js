@@ -262,11 +262,26 @@ function addToScreen(item) {
         espression += `${item.id}`;
     }
 }
+function addToDisplay(item) {
+
+    MathJax.typesetPromise().then(() => {
+        // modify the DOM here
+        display.innerHTML = `\\(${display.innerText + screenio.innerText + item.innerText}\\)`;
+        MathJax.typesetPromise();
+    }).catch((err) => console.log(err.message));
+}
+
 buttons.forEach((item) => {
     const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const ops = ["power", "div", "mul", "sub", "add"]
     if (nums.indexOf(item.id) != -1) {
         item.addEventListener('click', () => {
             addToScreen(item);
+        });
+    }
+    else if (ops.indexOf(item.id) != -1) {
+        item.addEventListener('click', () => {
+            addToDisplay(item);
         });
     }
 
