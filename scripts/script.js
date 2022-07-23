@@ -336,13 +336,46 @@ function addLast() {
 
     }
 }
+
 function sciNotation(number) {
-    if (number.toString.indexOf(".") != -1) {
+    if (number.toString().indexOf(".") != -1 && number.toString().indexOf("e") == -1) {
         var num = number.toString();
-        return num.substring(0, 14);
+        return parseFloat(num.substring(0, 15)).toFixed(13 - num.substring(0, num.indexOf(".")).length);
     }
-
-
+    else if (number.toString().indexOf("e") != -1) {
+        var num = number.toString();
+        if (num.indexOf(".") != -1) {
+            var first = num.substring(0, num.indexOf("."));
+            var dec = num.substring(num.indexOf(".") + 1, num.indexOf("e"));
+            var e = num.substring(num.indexOf("e") + 2);
+            let len = e.length + first.length;
+            if (dec.length + len > 14) {
+                dec = dec.substring(0, 13 - len);
+            }
+            return `${first}.${dec}\\times 10 ^{${e}}`
+        } else {
+            var first = num.substring(0, num.indexOf("e"));
+            var e = num.substring(num.indexOf("e") + 2);
+            return `${first}\\times 10 ^{${e}}`
+        }
+    }
+    else {
+        var num = number.toExponential().toString();
+        if (num.indexOf(".") != -1) {
+            var first = num.substring(0, num.indexOf("."));
+            var dec = num.substring(num.indexOf(".") + 1, num.indexOf("e"));
+            var e = num.substring(num.indexOf("e") + 2);
+            let len = e.length + first.length;
+            if (dec.length + len > 14) {
+                dec = dec.substring(0, 13 - len);
+            }
+            return `${first}.${dec}\\times 10 ^{${e}}`
+        } else {
+            var first = num.substring(0, num.indexOf("e"));
+            var e = num.substring(num.indexOf("e") + 2);
+            return `${first}\\times 10 ^{${e}}`
+        }
+    }
 }
 function solve() {
 
@@ -364,8 +397,8 @@ function solve() {
             if (ans == -Infinity) screenio.innerHTML = `\\(=-\\infty\\)`;
             else if (ans == Infinity) screenio.innerHTML = `\\(=\\infty\\)`;
             else {
-                if (ans.toString() > 13) {
-                    ans = exponential(ans);
+                if (ans.toString().length > 14 || ans.toString().indexOf("e") != -1) {
+                    ans = sciNotation(ans);
                 }
                 screenio.innerHTML = `\\(=${ans}\\)`
             };
