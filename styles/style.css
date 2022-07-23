@@ -65,6 +65,16 @@ button {
   box-shadow: 1px 1px 1px 1px rgb(10, 27, 0);
   background-color: rgba(0, 0, 0, 0.466);
 }
+
+button#eq {
+  background-color: rgb(2, 6, 66);
+}
+button#backspace {
+  background-color: rgb(224, 146, 0);
+}
+button#clear {
+  background-color: rgb(155, 31, 0);
+}
 button:hover {
   background-color: rgb(0, 0, 0);
 }
