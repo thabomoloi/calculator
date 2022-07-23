@@ -250,4 +250,24 @@ function getAnswer(exp) {
 // Query selectors
 const display = document.querySelector(".display");
 const screenio = document.querySelector(".screenio");
-const buttons = document.querySelector("button");
+const buttons = document.querySelectorAll("button");
+
+// espression to solve
+var espression = "";
+
+// buttons event listeners
+function addToScreen(item) {
+    if (screenio.innerText.length < 15) {
+        screenio.innerText += `${item.id}`;
+        espression += `${item.id}`;
+    }
+}
+buttons.forEach((item) => {
+    const nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    if (nums.indexOf(item.id) != -1) {
+        item.addEventListener('click', () => {
+            addToScreen(item);
+        });
+    }
+
+});
