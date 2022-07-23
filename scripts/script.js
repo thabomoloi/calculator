@@ -227,7 +227,7 @@ function solveRpn(exp) {
             var operators = ["^", "/", "*", "p", "m"]
 
             if (operators.indexOf(token) != -1) stack.add(operate(o1, o2, token));
-            /*else throw new Error(`The operator [${token}] is not supported.`);*/
+            else throw new Error(`The operator [${token}] is not supported.`);
         }
     }
     // the stack should have no numbers remaining
@@ -278,9 +278,14 @@ function addToScreen(item) {
 }
 function addToDisplay(item) {
 
-    const ops = ["÷", "×", "+", "-"];
+    const ops = ["÷", "×", "+", "−"];
     const op = display.innerText.charAt(display.innerText.length - 1);
-    if (op.indexOf((screenio.innerText.charAt(0).replace("-", "m")) == -1 || !screen.innerText)) {
+    if (ops.indexOf(op) != -1 && isNaN(item.id) && !screenio.innerText) {
+        document.querySelector(".screen").style.backgroundColor = "rgb(255, 98, 98)";
+        setTimeout(() => { document.querySelector(".screen").style.backgroundColor = "rgb(233, 255, 215)"; }, 500);
+    }
+    else if (op.indexOf((screenio.innerText.charAt(0).replace("-", "m")) == -1 || !screen.innerText)) {
+
         if (displayIsEmpty() && isNaN(item.id) && (screenio.innerText.length == 0 || isNaN(screenio.innerText))) return;
         if (isNaN(screenio.innerText)) return;
         MathJax.typesetPromise().then(() => {
@@ -337,28 +342,35 @@ function solve() {
         addLast();
     }
     if (!expression) return;
-    expression = expression.replaceAll("mul", "*");
-    expression = expression.replaceAll("m", "-");
-    expression = expression.replaceAll("add", "p");
-    expression = expression.replaceAll("sub", "m");
+    exp = expression;
+    exp = exp.replaceAll("mul", "*");
+    exp = exp.replaceAll("m", "-");
+    exp = exp.replaceAll("add", "p");
+    exp = exp.replaceAll("sub", "m");
 
-    expression = expression.replaceAll("div", "/");
-    var ans = getAnswer(expression);
+    exp = exp.replaceAll("div", "/");
+    try {
+        var ans = getAnswer(exp);
 
-    MathJax.typesetPromise().then(() => {
-        if (ans == -Infinity) screenio.innerHTML = `\\(-\\infty\\)`;
-        else if (ans == Infinity) screenio.innerHTML = `\\(\\infty\\)`;
-        else screenio.innerHTML = `\\(${ans}\\)`;
-        MathJax.typesetPromise();
-    }).catch((err) => console.log(err.message));
+        MathJax.typesetPromise().then(() => {
+            if (ans == -Infinity) screenio.innerHTML = `\\(=-\\infty\\)`;
+            else if (ans == Infinity) screenio.innerHTML = `\\(=\\infty\\)`;
+            else screenio.innerHTML = `\\(=${ans}\\)`;
+            MathJax.typesetPromise();
+        }).catch((err) => console.log(err.message));
+        // disable
+        equals.disabled = true;
+        buttons.forEach((button) => {
+            if (!(button.id == "clear")) {
+                button.disabled = true;
+            }
+        });
+    } catch (err) {
+        document.querySelector(".screen").style.backgroundColor = "rgb(255, 98, 98)";
+        setTimeout(() => { document.querySelector(".screen").style.backgroundColor = "rgb(233, 255, 215)"; }, 500);
+    }
 
-    // disable
-    equals.disabled = true;
-    buttons.forEach((button) => {
-        if (!(button.id == "clear")) {
-            button.disabled = true;
-        }
-    });
+
 
 }
 buttons.forEach((item) => {
