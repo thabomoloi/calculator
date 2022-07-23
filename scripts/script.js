@@ -212,7 +212,6 @@ function parseExpression(exp) {
 }
 
 function solveRpn(exp) {
-    exp = exp.trim();
     const stack = new Stack();
 
     for (const token of exp) {
@@ -222,7 +221,7 @@ function solveRpn(exp) {
         }
         else {
             // the stack must have 2 or more operands
-            //console.log(stack.items)
+
             if (stack.size() < 2) throw new Error("Syntax Error!");
             const o2 = stack.remove(), o1 = stack.remove();
             var operators = ["^", "/", "*", "p", "m"]
@@ -240,6 +239,7 @@ function solveRpn(exp) {
 }
 
 function getAnswer(exp) {
+    exp = exp.trim();
     const rpn = parseExpression(exp);
     return solveRpn(rpn);
 }
@@ -258,17 +258,16 @@ var expression = "";
 
 // buttons event listeners
 function addToScreen(item) {
-    if (screenio.innerText.length < 15) {
-        if (item.id == "plusminus") {
-            if (screenio.innerText.charAt(0) == "-") {
-                screenio.innerText = screenio.innerText.substring(1);
-            } else {
-                screenio.innerText = `-${screenio.innerText}`;
-            }
+    if (item.id == "plusminus") {
+        if (screenio.innerText.charAt(0) == "-") {
+            screenio.innerText = screenio.innerText.substring(1);
         } else {
-            screenio.innerText += `${item.id}`;
+            screenio.innerText = `-${screenio.innerText}`;
         }
+    } else {
+        screenio.innerText += `${item.id}`;
     }
+
 }
 function addToDisplay(item) {
     const ops = ["÷", "×", "+", "-", "="];
@@ -306,16 +305,38 @@ function backspace() {
 
     }
 }
+function addLast() {
+    if (!isNaN(screenio.innerText)) {
+        MathJax.typesetPromise().then(() => {
+            // modify the DOM here
+            var num = screenio.innerText.replace(/(-[0-9]*\.?[0-9]*)/g, "($1)")
+            display.innerHTML = `\\(${display.innerText + num} \\)`;
+            screenio.innerText = "";
+            MathJax.typesetPromise();
+        }).catch((err) => console.log(err.message));
+        expression += `${screenio.innerText.replace("-", "m")}`;
+
+
+    }
+}
 function solve() {
     try {
-        addToDisplay({ id: "", innerText: "" });
-        expression = expression.replace("mul", "*");
-        expression = expression.replace("m", "-");
-        expression = expression.replace("add", "p");
-        expression = expression.replace("sub", "m");
+        if (screenio.innerText) {
+            addLast();
+        }
+        expression = expression.replaceAll("mul", "*");
+        expression = expression.replaceAll("m", "-");
+        expression = expression.replaceAll("add", "p");
+        expression = expression.replaceAll("sub", "m");
 
-        expression = expression.replace("div", "/");
-        solveRpn(expression);
+        expression = expression.replaceAll("div", "/");
+        var ans = getAnswer(expression);
+        MathJax.typesetPromise().then(() => {
+            screenio.innerHTML = `\\(= ${ans}\\)`;
+            screenio.style.innerText =
+                MathJax.typesetPromise();
+        }).catch((err) => console.log(err.message));
+
     }
     catch (ex) {
         console.log(ex);
