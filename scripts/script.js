@@ -1,3 +1,6 @@
+// ====================================================
+//                 THE MATH BEHIND
+//=====================================================
 /**
  * Adds two numbers.
  * @param {Number} a 
@@ -240,3 +243,11 @@ function getAnswer(exp) {
     return solveRpn(rpn);
 }
 
+//=====================================================
+//               CALCULATOR APP
+//=====================================================
+
+// Query selectors
+const display = document.querySelector(".display");
+const screenio = document.querySelector(".screenio");
+const buttons = document.querySelector("button");
