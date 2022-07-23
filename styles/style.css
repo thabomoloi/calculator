@@ -53,11 +53,20 @@ html {
   text-align: right;
 }
 /*================ BUTTONS ============= */
+.row {
+  display: flex;
+  width: 100%;
+}
+.cell-1 {
+  flex: 1 1 50px;
+}
+.cell-2 {
+  flex: 1 1 100px;
+}
 button {
-  width: 50px;
-  height: 45px;
   font-weight: 700;
   overflow: hidden;
+  width: 50px;
   padding: 0;
   margin: 2px;
   font-size: 1.5rem;
