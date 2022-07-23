@@ -10,13 +10,25 @@ html {
   font-family: inherit;
   box-sizing: inherit;
 }
-
+/* ============== CALCULATOR ==========*/
+.calculator {
+  background-color: rgb(0, 100, 100);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 270px;
+  padding: 20px 0;
+  border-radius: 15px;
+  box-shadow: 2px 2px 2px 2px rgb(0, 0, 0);
+}
 /* =============== SCREEN ============ */
 .screen {
   background-color: rgb(233, 255, 215);
-  width: 200px;
-  height: 50px;
-  box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+  width: 220px;
+  height: 125px;
+  box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.541);
+  border-radius: 5px;
+  margin-bottom: 15px;
 }
 
 /*================ BUTTONS ============= */
@@ -26,10 +38,11 @@ button {
   font-weight: 700;
   overflow: hidden;
   padding: 0;
-  margin: 2.5px;
+  margin: 2px;
   font-size: 1.5rem;
   border: 1px solid #000;
   border-radius: 5px;
-  box-shadow: 1px 1px 1px 2px rgba(94, 255, 0, 0.253);
-  background-color: rgb(255, 255, 255);
+  color: #fff;
+  box-shadow: 1px 1px 1px 1px rgb(10, 27, 0);
+  background-color: rgba(0, 0, 0, 0.466);
 }
