@@ -25,32 +25,37 @@ html {
 /* =============== SCREEN ============ */
 .screen {
   background-color: rgb(233, 255, 215);
-  width: 220px;
-  height: 125px;
   box-shadow: inset 2px 2px 2px 2px rgba(0, 0, 0, 0.541);
   border-radius: 5px;
   margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
   border: 2px solid black;
 }
 /*=============== DISPLAY ============== */
+.space {
+  padding: 10px;
+  width: 220px;
+  height: 125px;
+  display: flex;
+  flex-direction: column;
+}
 .display {
   padding: 5px 10px;
   width: 100%;
-  height: 65%;
+  height: 60%;
   border-bottom: 1px solid black;
   font-size: 1.25rem;
   overflow: auto;
-  margin: 2px;
+  margin: 0px;
 }
 .screenio {
   padding: 5px 10px;
   font-size: 18px;
   width: 100%;
-  height: 35%;
-  font-size: 1.5rem;
+  height: 40%;
+  font-size: 1.25rem;
   text-align: right;
+  overflow: auto;
+  margin: 0px;
 }
 /*================ BUTTONS ============= */
 .row {
