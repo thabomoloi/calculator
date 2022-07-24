@@ -29,5 +29,5 @@ This is a simple calculator, and assignment from [The Odin Project](https://www.
 - The logarithm functions.
 - Exponentiation.
 - Factorial.
-- The trigonometic functions aother functions.
+- The trigonometic functions and other functions.
 - The values $\pi$ and $e$.
