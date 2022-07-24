@@ -157,6 +157,11 @@ class Stack {
     }
 }
 
+/**
+ * Implementation of the shunting yard algorithm.
+ * @param {String} exp The expression to evaluate.
+ * @returns The reverse polish notation.
+ */
 function parseExpression(exp) {
 
     exp = exp.split(" ");
@@ -211,6 +216,11 @@ function parseExpression(exp) {
     return output.items;
 }
 
+/**
+ * Solves the reverse polish notation.
+ * @param {*} exp The expression to evaluate.
+ * @returns The answer to the expression.
+ */
 function solveRpn(exp) {
     const stack = new Stack();
 
@@ -235,6 +245,11 @@ function solveRpn(exp) {
     return stack.peek();
 }
 
+/**
+ * Solves an expression.
+ * @param {*} exp The expression to evaluate.
+ * @returns The answer to the expression.
+ */
 function getAnswer(exp) {
     exp = exp.trim();
     const rpn = parseExpression(exp);
@@ -254,16 +269,29 @@ const equals = document.querySelector("#eq");
 // expression to solve
 var expression = "";
 
+/**
+ * Checks if the screenio has answer. 
+ * @returns True if screeio has answer else false.
+ */
 function screenHasAns() {
     if (screenio.innerText.charAt(0) == '=' || screenio.innerText == "Math Error!") {
         return true;
     }
     return false;
 }
+
+/**
+ * Checks if the display is empty.
+ * @returns True if the screen is empty else false.
+ */
 function displayIsEmpty() {
     return display.innerText == "";
 }
 // buttons event listeners
+/**
+ * Adds an item to the screenio.
+ * @param {*} item 
+ */
 function addToScreen(item) {
     if (item.id == "plusminus") {
         if (screenio.innerText.charAt(0) == "-") {
@@ -276,6 +304,11 @@ function addToScreen(item) {
     }
 
 }
+
+/**
+ * Adds an item to display.
+ * @param {*} item 
+ */
 function addToDisplay(item) {
 
     const ops = ["÷", "×", "+", "−"];
@@ -301,6 +334,9 @@ function addToDisplay(item) {
     }
 
 }
+/**
+ * Deletes a character.
+ */
 function backspace() {
 
     if (screenio.innerText) {
@@ -317,10 +353,11 @@ function backspace() {
             expression = expression.trim().substring(0, expression.trim().lastIndexOf(" "));
             MathJax.typesetPromise();
         }).catch((err) => console.log(err.message));
-
-
     }
 }
+/**
+ * Adds the last item to displaye before evaluating the expression.
+ */
 function addLast() {
     if (!isNaN(screenio.innerText)) {
         MathJax.typesetPromise().then(() => {
@@ -331,12 +368,14 @@ function addLast() {
             MathJax.typesetPromise();
         }).catch((err) => console.log(err.message));
         expression += `${screenio.innerText.replace("-", "m")}`;
-
-
-
     }
 }
 
+/**
+ * Finds the scientic notation.
+ * @param {*} number 
+ * @returns 
+ */
 function sciNotation(number) {
     if (number.toString().indexOf(".") != -1 && number.toString().indexOf("e") == -1) {
         var num = number.toString();
@@ -377,6 +416,10 @@ function sciNotation(number) {
         }
     }
 }
+/**
+ * Solves the expression and updates necessary information
+ * @returns 
+ */
 function solve() {
 
     if (screenio.innerText) {
@@ -463,3 +506,7 @@ buttons.forEach((item) => {
     }
 
 });
+
+//===========================================================
+//                    END
+//===========================================================
