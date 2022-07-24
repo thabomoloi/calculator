@@ -386,16 +386,20 @@ function sciNotation(number) {
         if (num.indexOf(".") != -1) {
             var first = num.substring(0, num.indexOf("."));
             var dec = num.substring(num.indexOf(".") + 1, num.indexOf("e"));
+            var sign = num.substring(num.indexOf("e") + 1, num.indexOf("e") + 2);
+            sign = (sign == "+") ? "" : "-";
             var e = num.substring(num.indexOf("e") + 2);
             let len = e.length + first.length;
             if (dec.length + len > 14) {
                 dec = dec.substring(0, 13 - len);
             }
-            return `${first}.${dec}\\times 10 ^{${e}}`
+            return `${first}.${dec}\\times 10 ^{${sign}${e}}`
         } else {
             var first = num.substring(0, num.indexOf("e"));
             var e = num.substring(num.indexOf("e") + 2);
-            return `${first}\\times 10 ^{${e}}`
+            var sign = num.substring(num.indexOf("e") + 1, num.indexOf("e") + 2);
+            sign = (sign == "+") ? "" : "-";
+            return `${first}\\times 10 ^{${sign}${e}}`
         }
     }
     else {
