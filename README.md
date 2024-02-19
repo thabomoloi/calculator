@@ -2,7 +2,7 @@
 
 This is a simple calculator, and assignment from [The Odin Project](https://www.theodinproject.com/lessons/foundations-calculator).
 
-[Click here for live demo](https://thabomcodes.github.io/calculator/)
+[Click here for live demo](https://thabomoloi.github.io/calculator/)
 
 ## Features
 
